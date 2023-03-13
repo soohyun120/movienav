@@ -5,6 +5,7 @@ import com.movienav.domain.repository.MovieHeartRepository;
 import com.movienav.domain.entity.Member;
 import com.movienav.domain.repository.MemberRepository;
 import com.movienav.domain.entity.Movie;
+import com.movienav.domain.repository.ReviewRepository;
 import com.movienav.domain.repository.movie.MovieRepository;
 import com.movienav.domain.entity.Rating;
 import com.movienav.domain.repository.RatingRepository;

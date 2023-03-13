@@ -46,18 +46,7 @@ public class ReviewController {
 
         List<Review> reviews = reviewService.findReviewsByMember(userDetails.getUsername());
         List<ReviewResponse> collect = (List) reviews.stream().map((r) -> {
-            return new ReviewResponse(r.getMember(), r.getMovie(), r.getContent(), r.getCount());
-        }).collect(Collectors.toList());
-
-        return ResponseEntity.ok(collect);
-    }
-
-    //리뷰 영화별 조회
-    @GetMapping("/{movieId}")
-    public ResponseEntity findByMovie(@PathVariable("movieId") Long movieId) {
-        List<Review> reviews = reviewService.findReviewsByMovie(movieId);
-        List<ReviewResponse> collect = (List) reviews.stream().map((r) -> {
-            return new ReviewResponse(r.getMember(), r.getMovie(), r.getContent(), r.getCount());
+            return new ReviewResponse(r.getMember().getId(), r.getMovie().getId(), r.getContent(), r.getCount());
         }).collect(Collectors.toList());
 
         return ResponseEntity.ok(collect);
@@ -68,7 +57,7 @@ public class ReviewController {
     public ResponseEntity findAll() {
         List<Review> reviews = reviewService.findAll();
         List<ReviewResponse> collect = (List) reviews.stream().map((r) -> {
-            return new ReviewResponse(r.getMember(), r.getMovie(), r.getContent(), r.getCount());
+            return new ReviewResponse(r.getMember().getId(), r.getMovie().getId(), r.getContent(), r.getCount());
         }).collect(Collectors.toList());
 
         return ResponseEntity.ok(collect);

@@ -1,8 +1,13 @@
 package com.movienav.domain.repository;
 
-import com.movienav.domain.entity.Movie;
+import com.movienav.domain.entity.*;
+import com.movienav.domain.entity.QMovie;
+import com.movienav.domain.entity.QReview;
 import com.movienav.domain.repository.movie.MovieRepository;
+import com.movienav.domain.repository.movie.MovieRepositoryImpl;
 import com.movienav.exception.CustomException;
+import com.querydsl.core.Tuple;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
@@ -12,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.movienav.domain.entity.QMovie.movie;
+import static com.movienav.domain.entity.QReview.review;
 import static com.movienav.exception.error.MovieErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -20,6 +27,8 @@ import static org.assertj.core.api.Assertions.*;
 class MovieRepositoryTest {
 
     @Autowired MovieRepository movieRepository;
+    @Autowired ReviewRepository reviewRepository;
+    @Autowired MemberRepository memberRepository;
     @PersistenceContext EntityManager em;
 
     @Test

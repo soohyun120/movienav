@@ -15,8 +15,8 @@ public class MovienavApplication {
 		SpringApplication.run(MovienavApplication.class, args);
 	}
 
-	@Bean
-	JPAQueryFactory jpaQueryFactory(EntityManager em) {
-		return new JPAQueryFactory(em);
-	}
+//	@Bean
+//	JPAQueryFactory jpaQueryFactory(EntityManager em) {
+//		return new JPAQueryFactory(em);
+//	}
 }

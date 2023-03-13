@@ -1,29 +1,29 @@
 package com.movienav.domain.repository.movie;
 
-import com.movienav.domain.dto.search.MovieReviewResponse;
-import com.movienav.domain.dto.search.MovieSearchCondition;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+import static com.movienav.domain.entity.QMovie.movie;
+import static com.movienav.domain.entity.QReview.review;
+
 public class MovieRepositoryImpl implements MovieRepositoryCustom {
 
-    private final JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory queryFactory;
 
     public MovieRepositoryImpl(EntityManager em) {
-        this.jpaQueryFactory = new JPAQueryFactory(em);
+        this.queryFactory = new JPAQueryFactory(em);
     }
 
-    @Override
-    public List<MovieReviewResponse> search(MovieSearchCondition condition) {
-        return null;
-    }
-
-    @Override
-    public Page<MovieReviewResponse> searchPage(MovieSearchCondition condition, Pageable pageable) {
-        return null;
-    }
+//    @Override
+//    public List<MovieReviewResponse> search(MovieSearchCondition condition) {
+//        return null;
+//    }
+//
+//    @Override
+//    public Page<MovieReviewResponse> searchPage(MovieSearchCondition condition, Pageable pageable) {
+//        return null;
+//    }
 }
