@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface ReviewHeartRepository extends JpaRepository<ReviewHeart, Long> {
     Optional<ReviewHeart> findByMemberAndReview(Member member, Review review);
     List<ReviewHeart> findByReview(Review review);
+    List<ReviewHeart> findByMember(Member member);
 
     void deleteByMember(Member member);
     void deleteByReview(Review review);

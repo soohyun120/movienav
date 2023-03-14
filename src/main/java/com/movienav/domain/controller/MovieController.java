@@ -1,10 +1,12 @@
 package com.movienav.domain.controller;
 
 import com.movienav.domain.dto.movie.MovieResponse;
-import com.movienav.domain.dto.movie.MovieReviewResponse;
+import com.movienav.domain.dto.movie.Result;
 import com.movienav.domain.dto.review.ReviewResponse;
-import com.movienav.domain.entity.Movie;
-import com.movienav.domain.entity.Review;
+import com.movienav.domain.entity.*;
+import com.movienav.domain.repository.MovieHeartRepository;
+import com.movienav.domain.repository.RatingRepository;
+import com.movienav.domain.service.MemberService;
 import com.movienav.domain.service.MovieService;
 import com.movienav.domain.service.ReviewService;
 import com.movienav.security.config.UserDetailsImpl;
@@ -24,22 +26,38 @@ import java.util.stream.Collectors;
 public class MovieController {
 
     private final MovieService movieService;
+    private final MemberService memberService;
     private final ReviewService reviewService;
+    private final MovieHeartRepository movieHeartRepository;
+    private final RatingRepository ratingRepository;
 
     /**
      * 영화 상세조회
      */
     @GetMapping("/{movieId}")
-    public ResponseEntity findMovie(@PathVariable("movieId") Long movieId) {
+    public ResponseEntity findMovie(Authentication authentication, @PathVariable("movieId") Long movieId) {
+        // 영화
         Movie movie = movieService.findMovie(movieId);
         MovieResponse movieResponse = new MovieResponse(movie);
 
+        // 리뷰리스트
         List<Review> reviews = reviewService.findReviewsByMovie(movieId);
         List<ReviewResponse> collect = (List) reviews.stream().map((r) -> {
             return new ReviewResponse(r.getMember().getId(), r.getMovie().getId(), r.getContent(), r.getCount());
         }).collect(Collectors.toList());
 
-        return ResponseEntity.ok(new MovieReviewResponse(movieResponse, collect));
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        // 유저 영화 찜
+        Member member = memberService.getMyInfo(userDetails.getUsername());
+        MovieHeart movieHeart = movieHeartRepository.findByMemberAndMovie(member, movie).orElse(null);
+        Boolean isMovieHeart = movieHeart != null ? true : false;
+
+        // 유저 별점
+        Rating rating = ratingRepository.findByMemberAndMovie(member, movie).orElse(null);
+        Integer score = rating != null ? rating.getScore() : null;
+
+        return ResponseEntity.ok(new Result(movieResponse, collect, isMovieHeart, score));
     }
 
     /**

@@ -61,7 +61,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login", "/api/movie/**").permitAll()
                         .requestMatchers( "/api/movie/{movieId}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/review").permitAll()
-                        .requestMatchers("/api/review/{reviewId}", "/api/review/{movieId}", "/api/review/all").permitAll()
+                        .requestMatchers("/api/review/{reviewId}", "/api/review/all").permitAll()
                         .anyRequest().authenticated()
                 )
 

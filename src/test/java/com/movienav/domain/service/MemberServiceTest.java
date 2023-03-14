@@ -2,12 +2,12 @@ package com.movienav.domain.service;
 
 import com.movienav.domain.dto.member.FindPasswordRequest;
 import com.movienav.domain.dto.member.FindUsernameRequest;
-import com.movienav.domain.entity.Member;
+import com.movienav.domain.entity.*;
 import com.movienav.domain.dto.member.MemberJoinRequest;
 import com.movienav.domain.dto.member.MemberUpdateRequest;
 import com.movienav.domain.dto.member.PasswordUpdateRequest;
 import com.movienav.domain.entity.enumPackage.UserRole;
-import com.movienav.domain.repository.MemberRepository;
+import com.movienav.domain.repository.*;
 import com.movienav.exception.CustomException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -29,6 +29,10 @@ class MemberServiceTest {
 
     @Autowired MemberService memberService;
     @Autowired MemberRepository memberRepository;
+    @Autowired MovieHeartRepository movieHeartRepository;
+    @Autowired ReviewHeartRepository reviewHeartRepository;
+    @Autowired ReviewRepository reviewRepository;
+    @Autowired RatingRepository ratingRepository;
     @PersistenceContext EntityManager em;
 
     private MemberJoinRequest createMemberJoinRequest() {
@@ -191,6 +195,14 @@ class MemberServiceTest {
 
         memberService.join(memberJoinRequest);
 
+        Member member = memberRepository.findByUsername(username).orElseThrow(
+                () -> new CustomException(NO_USER));
+        Review review = new Review(member, null, "zzzz");
+        reviewRepository.save(review);
+        reviewHeartRepository.save(new ReviewHeart(member, review));
+        movieHeartRepository.save(new MovieHeart(member, null));
+        ratingRepository.save(new Rating(member, null, null));
+
         em.flush();
         em.clear();
 
@@ -201,6 +213,10 @@ class MemberServiceTest {
         assertThrows(CustomException.class, () -> memberRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(NO_USER)))
                 .getErrorCode().equals(NO_USER);
+        assertThat(reviewHeartRepository.findByMember(member).size()).isEqualTo(0);
+        assertThat(reviewRepository.findByMember(member).size()).isEqualTo(0);
+        assertThat(movieHeartRepository.findByMember(member).size()).isEqualTo(0);
+        assertThat(ratingRepository.findByMember(member).size()).isEqualTo(0);
     }
 
     @Test
