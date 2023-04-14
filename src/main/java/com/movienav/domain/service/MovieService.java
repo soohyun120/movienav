@@ -59,7 +59,7 @@ public class MovieService {
         }
         //별점 없으면
         else {
-            //movie - voteAver,votCount 추가
+            //movie: voteAver,votCount 추가
             movie.addVote(score);
 
             //별점 저장

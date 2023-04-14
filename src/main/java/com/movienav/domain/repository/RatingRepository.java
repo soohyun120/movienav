@@ -12,6 +12,5 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     Optional<Rating> findByMemberAndMovie(Member member, Movie movie);
     List<Rating> findByMember(Member member);
 
-    //querydsl
     void deleteByMember(Member member);
 }
